@@ -1,19 +1,44 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./App.css";
 
 function App() {
   const [name, setName] = useState("");
   const [datetime, setDatetime] = useState("");
   const [description, setDescription] = useState("");
+  const [transactions, setTransactions] = useState("");
+
+  useEffect(() => {
+    getTransactions().then((transactions) => {
+      setTransactions(transactions);
+    });
+  }, []);
+
+  async function getTransactions() {
+    const url = process.env.REACT_APP_API_URL + "/transactions";
+    const response = await fetch(url);
+    return await response.json();
+  }
+
   function addNewTransaction(ev) {
     ev.preventDefault();
     const url = process.env.REACT_APP_API_URL + "/transaction";
+
+    const price = name.split(" ")[0];
+
     fetch(url, {
       method: "POST",
       headers: { "Content-type": "application/json" },
-      body: JSON.stringify({ name, description, datetime }),
+      body: JSON.stringify({
+        price,
+        name: name.substring(price.length + 1),
+        description,
+        datetime,
+      }),
     }).then((response) => {
       response.json().then((json) => {
+        setName("");
+        setDatetime("");
+        setDescription("");
         console.log("result", json);
       });
     });
@@ -47,6 +72,7 @@ function App() {
           />
         </div>
         <button type="submit">Add new transaction</button>
+        {transactions.length}
       </form>
       <div className="transactions">
         <div className="transaction">
