@@ -81,8 +81,8 @@ function App() {
       </form>
       <div className="transactions">
         {transactions.length > 0 &&
-          transactions.map((transaction) => (
-            <div className="transaction">
+          transactions.map((transaction, index) => (
+            <div key={index} className="transaction">
               <div className="left">
                 <div className="name">{transaction.name}</div>
                 <div className="description">{transaction.description}</div>
@@ -95,7 +95,7 @@ function App() {
                 >
                   {transaction.price}
                 </div>
-                <div className="datetime">2022-12-18 15:45</div>
+                <div className="datetime">{transaction.datetime}</div>
               </div>
             </div>
           ))}
