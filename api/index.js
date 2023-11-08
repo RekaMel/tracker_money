@@ -30,7 +30,4 @@ app.get("/api/transactions", async (req, res) => {
   res.json(transactions);
 });
 
-if (4000) {
-  app.listen(4000);
-}
-module.exports = app;
+app.listen(4000);
